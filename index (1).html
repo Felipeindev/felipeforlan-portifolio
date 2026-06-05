@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Felipe Forlan — Sites & Automação</title>
+<meta name="description" content="Felipe Forlan — Desenvolvimento de sites profissionais e automação para negócios em Goiânia e todo o Brasil.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0A0A0A;
+    --surface:  #111111;
+    --border:   #1E1E1E;
+    --border2:  #2C2C2C;
+    --muted:    #555555;
+    --body:     #999999;
+    --text:     #E8E4DC;
+    --white:    #F7F4EE;
+    --accent:   #4AE68A;
+    --accent2:  #2DB96A;
+    --blue:     #4A8AE6;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.25rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid transparent;
+    transition: all 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom-color: var(--border);
+  }
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem; font-weight: 300;
+    color: var(--white); letter-spacing: 0.5px;
+  }
+  .nav-logo span { color: var(--accent); font-style: italic; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--body); text-decoration: none; transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--bg); background: var(--accent);
+    padding: 9px 20px; border-radius: 4px; text-decoration: none;
+    transition: all 0.3s; font-weight: 500;
+  }
+  .nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 3rem 5rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-glow {
+    position: absolute; top: -20%; left: -10%;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(74,230,138,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    animation: glow-float 8s ease-in-out infinite;
+  }
+  .hero-glow2 {
+    position: absolute; bottom: -10%; right: 0%;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(74,138,230,0.05) 0%, transparent 70%);
+    pointer-events: none;
+    animation: glow-float 10s ease-in-out infinite reverse;
+  }
+  @keyframes glow-float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -20px); }
+  }
+  .hero-grid-lines {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border2); border-radius: 100px;
+    padding: 6px 14px; margin-bottom: 2.5rem;
+    font-size: 0.7rem; letter-spacing: 1px; color: var(--body);
+  }
+  .hero-badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 300; line-height: 1.0;
+    color: var(--white); margin-bottom: 1.5rem;
+  }
+  .hero-title .line2 {
+    display: block; font-style: italic; color: var(--accent);
+  }
+  .hero-title .line3 {
+    display: block;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300; font-size: 0.55em;
+    color: var(--body); letter-spacing: 1px;
+    margin-top: 0.4rem;
+  }
+
+  .hero-sub {
+    font-size: 1rem; line-height: 1.8; color: var(--body);
+    max-width: 520px; margin-bottom: 3rem; font-weight: 300;
+  }
+  .hero-sub strong { color: var(--text); font-weight: 500; }
+
+  .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: var(--bg);
+    padding: 14px 28px; border-radius: 6px; font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px;
+    text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(74,230,138,0.2); }
+  .btn-secondary {
+    background: transparent; color: var(--text);
+    padding: 14px 28px; border-radius: 6px; font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem; font-weight: 400;
+    border: 1px solid var(--border2);
+    text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 5rem;
+    padding-top: 3rem; border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .hstat-val {
+    font-family: 'Fraunces', serif;
+    font-size: 2.2rem; font-weight: 300; color: var(--accent);
+    line-height: 1;
+  }
+  .hstat-label { font-size: 0.72rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.5px; }
+
+  /* ── SEÇÃO ── */
+  .sec { padding: 8rem 3rem; position: relative; z-index: 1; }
+  .sec-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.25rem;
+  }
+  .sec-chip::before { content: ''; width: 20px; height: 1px; background: var(--accent); }
+  .sec-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 300; color: var(--white); line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  .sec-title em { font-style: italic; color: var(--accent); }
+  .sec-sub { font-size: 0.9rem; color: var(--body); font-weight: 300; max-width: 500px; line-height: 1.7; }
+
+  /* ── SERVIÇOS ── */
+  .services-sec { background: var(--surface); }
+  .services-inner { max-width: 1200px; margin: 0 auto; }
+  .services-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; flex-wrap: wrap; gap: 2rem; }
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1px; }
+  .srv-card {
+    background: var(--bg);
+    padding: 2.5rem;
+    border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    transition: border-color 0.4s, background 0.4s;
+    cursor: default;
+  }
+  .srv-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--accent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .srv-card:hover { border-color: var(--border2); background: var(--surface); }
+  .srv-card:hover::after { transform: scaleX(1); }
+  .srv-icon {
+    width: 48px; height: 48px; border-radius: 10px;
+    background: rgba(74,230,138,0.08); border: 1px solid rgba(74,230,138,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 1.5rem;
+  }
+  .srv-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem; color: var(--white); margin-bottom: 0.75rem; font-weight: 400;
+  }
+  .srv-desc { font-size: 0.82rem; color: var(--body); line-height: 1.75; margin-bottom: 1.5rem; font-weight: 300; }
+  .srv-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .srv-tag {
+    font-size: 0.6rem; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); border: 1px solid var(--border2);
+    padding: 3px 10px; border-radius: 3px;
+  }
+
+  /* ── PROCESSO ── */
+  .processo-inner { max-width: 1100px; margin: 0 auto; }
+  .processo-header { margin-bottom: 4rem; }
+  .processo-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
+  .processo-steps::before {
+    content: '';
+    position: absolute; top: 24px; left: 10%; right: 10%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border2) 20%, var(--border2) 80%, transparent);
+  }
+  .step { padding: 0 1.5rem; text-align: center; }
+  .step-num {
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 1px solid var(--border2); background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; color: var(--accent); letter-spacing: 1px;
+    margin: 0 auto 1.5rem; position: relative; z-index: 2;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .step:hover .step-num { border-color: var(--accent); background: rgba(74,230,138,0.08); }
+  .step-title { font-family: 'Fraunces', serif; font-size: 1.1rem; color: var(--white); margin-bottom: 0.5rem; }
+  .step-desc { font-size: 0.78rem; color: var(--body); line-height: 1.7; font-weight: 300; }
+
+  /* ── PROJETOS ── */
+  .projetos-inner { max-width: 1200px; margin: 0 auto; }
+  .projetos-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem; }
+  .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .proj-card {
+    border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    transition: border-color 0.4s, transform 0.4s;
+    background: var(--surface);
+  }
+  .proj-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .proj-thumb {
+    height: 200px; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .proj-thumb-1 { background: linear-gradient(135deg, #1B4D3E 0%, #0d2a21 100%); }
+  .proj-thumb-2 { background: linear-gradient(135deg, #0A0A0A 0%, #1C1C1C 100%); }
+  .proj-thumb-3 { background: linear-gradient(135deg, #0a1428 0%, #162040 100%); }
+  .proj-thumb-4 { background: linear-gradient(135deg, #1a0a28 0%, #2d1050 100%); }
+  .proj-monogram {
+    font-family: 'Fraunces', serif;
+    font-size: 5rem; font-style: italic; font-weight: 300;
+    opacity: 0.15; color: #fff; user-select: none;
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .proj-card:hover .proj-monogram { opacity: 0.25; transform: scale(1.05); }
+  .proj-body { padding: 1.5rem 1.75rem; }
+  .proj-category { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+  .proj-name { font-family: 'Fraunces', serif; font-size: 1.2rem; color: var(--white); margin-bottom: 0.5rem; }
+  .proj-desc { font-size: 0.78rem; color: var(--body); line-height: 1.65; font-weight: 300; margin-bottom: 1.25rem; }
+  .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .proj-tag {
+    font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase;
+    background: rgba(74,230,138,0.08); color: var(--accent);
+    border: 1px solid rgba(74,230,138,0.15); padding: 3px 10px; border-radius: 3px;
+  }
+
+  /* ── CTA ── */
+  .cta-sec {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 8rem 3rem;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .cta-glow {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 300px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(74,230,138,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-content { position: relative; z-index: 2; max-width: 650px; margin: 0 auto; }
+  .cta-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 300; color: var(--white); line-height: 1.1; margin-bottom: 1.25rem;
+  }
+  .cta-title em { font-style: italic; color: var(--accent); }
+  .cta-sub { font-size: 0.9rem; color: var(--body); line-height: 1.7; margin-bottom: 2.5rem; font-weight: 300; }
+  .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 3rem;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;
+  }
+  .footer-logo { font-family: 'Fraunces', serif; font-size: 1rem; color: rgba(255,255,255,0.3); font-weight: 300; }
+  .footer-logo span { color: var(--accent); font-style: italic; }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a { font-size: 0.7rem; color: var(--muted); text-decoration: none; letter-spacing: 0.5px; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-copy { font-size: 0.65rem; color: rgba(255,255,255,0.15); }
+
+  /* ── REVEAL ── */
+  .r { opacity: 0; transform: translateY(28px); transition: opacity 0.7s, transform 0.7s; }
+  .r.on { opacity: 1; transform: translateY(0); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 800px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { display: none; }
+    .sec { padding: 5rem 1.25rem; }
+    .hero { padding: 7rem 1.25rem 4rem; }
+    .hero-stats { gap: 2rem; }
+    .processo-steps { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .processo-steps::before { display: none; }
+    .proj-grid { grid-template-columns: 1fr; }
+    .services-header { flex-direction: column; align-items: flex-start; }
+    footer { flex-direction: column; padding: 2rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">Felipe <span>Forlan</span></div>
+  <ul class="nav-links">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#projetos">Projetos</a></li>
+    <li><a href="#processo">Processo</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <a href="https://wa.me/5562999999999?text=Olá Felipe! Vi seu portfólio e gostaria de conversar sobre um projeto." class="nav-cta">Falar no WhatsApp</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Disponível para novos projetos · Goiânia, GO
+    </div>
+    <h1 class="hero-title">
+      Sites que<br>
+      <span class="line2">convertem.</span>
+      <span class="line3">Automação que liberta.</span>
+    </h1>
+    <p class="hero-sub">
+      Sou <strong>Felipe Forlan</strong> — crio sites profissionais e automações para negócios que querem crescer online. <strong>Do briefing ao ar</strong>, cuido de tudo.
+    </p>
+    <div class="hero-actions">
+      <a href="https://wa.me/5562999999999?text=Olá Felipe! Vi seu portfólio e gostaria de um orçamento." class="btn-primary">
+        💬 Pedir orçamento
+      </a>
+      <a href="#projetos" class="btn-secondary">
+        Ver projetos →
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hstat-val">100%</div>
+        <div class="hstat-label">Entrega garantida</div>
+      </div>
+      <div>
+        <div class="hstat-val">48h</div>
+        <div class="hstat-label">Prazo médio</div>
+      </div>
+      <div>
+        <div class="hstat-val">GYN</div>
+        <div class="hstat-label">Goiânia & Brasil</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section class="sec services-sec" id="servicos">
+  <div class="services-inner">
+    <div class="services-header r">
+      <div>
+        <p class="sec-chip">O que eu faço</p>
+        <h2 class="sec-title">Serviços que<br><em>geram resultado</em></h2>
+      </div>
+      <p class="sec-sub">Cada projeto é entregue pronto para hospedar, responsivo e pensado para converter visitantes em clientes.</p>
+    </div>
+    <div class="services-grid">
+      <div class="srv-card r">
+        <div class="srv-icon">🌐</div>
+        <h3 class="srv-name">Sites Profissionais</h3>
+        <p class="srv-desc">Landing pages e sites institucionais com design exclusivo, otimizados para aparecer no Google e converter visitantes em clientes reais.</p>
+        <div class="srv-tags">
+          <span class="srv-tag">HTML / CSS</span>
+          <span class="srv-tag">Responsivo</span>
+          <span class="srv-tag">SEO básico</span>
+        </div>
+      </div>
+      <div class="srv-card r">
+        <div class="srv-icon">⚡</div>
+        <h3 class="srv-name">Automação de Processos</h3>
+        <p class="srv-desc">Automatizo tarefas repetitivas do seu negócio — respostas no WhatsApp, agendamentos, notificações e integrações entre sistemas.</p>
+        <div class="srv-tags">
+          <span class="srv-tag">WhatsApp Bot</span>
+          <span class="srv-tag">Integrações</span>
+          <span class="srv-tag">Workflows</span>
+        </div>
+      </div>
+      <div class="srv-card r">
+        <div class="srv-icon">🚀</div>
+        <h3 class="srv-name">Publicação & Hospedagem</h3>
+        <p class="srv-desc">Cuido de tudo para o seu site ir ao ar: domínio, hospedagem, e-mail profissional e configuração completa. Você não precisa entender de nada técnico.</p>
+        <div class="srv-tags">
+          <span class="srv-tag">Domínio</span>
+          <span class="srv-tag">Hostinger</span>
+          <span class="srv-tag">SSL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESSO -->
+<section class="sec" id="processo">
+  <div class="processo-inner">
+    <div class="processo-header r">
+      <p class="sec-chip">Como funciona</p>
+      <h2 class="sec-title">Simples e<br><em>transparente</em></h2>
+    </div>
+    <div class="processo-steps">
+      <div class="step r">
+        <div class="step-num">01</div>
+        <h4 class="step-title">Conversa</h4>
+        <p class="step-desc">Você me conta sobre o negócio, o que precisa e como imagina. Nada técnico — só uma conversa.</p>
+      </div>
+      <div class="step r">
+        <div class="step-num">02</div>
+        <h4 class="step-title">Proposta</h4>
+        <p class="step-desc">Envio um orçamento claro, com prazo e o que será entregue. Sem surpresas.</p>
+      </div>
+      <div class="step r">
+        <div class="step-num">03</div>
+        <h4 class="step-title">Desenvolvimento</h4>
+        <p class="step-desc">Desenvolvo o projeto com agilidade. Em até 48h você já tem uma prévia para aprovar.</p>
+      </div>
+      <div class="step r">
+        <div class="step-num">04</div>
+        <h4 class="step-title">Entrega</h4>
+        <p class="step-desc">Site no ar, funcionando. Você recebe o arquivo e o acesso completo. Suporte incluso.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETOS -->
+<section class="sec" id="projetos" style="background: var(--surface);">
+  <div class="projetos-inner">
+    <div class="projetos-header r">
+      <div>
+        <p class="sec-chip">Portfólio</p>
+        <h2 class="sec-title">Projetos<br><em>entregues</em></h2>
+      </div>
+      <a href="https://wa.me/5562999999999?text=Olá! Vi seu portfólio e quero um site igual." class="btn-primary">Quero um igual →</a>
+    </div>
+    <div class="proj-grid">
+      <div class="proj-card r">
+        <div class="proj-thumb proj-thumb-1">
+          <div class="proj-monogram">SB</div>
+        </div>
+        <div class="proj-body">
+          <p class="proj-category">Site institucional</p>
+          <h3 class="proj-name">Salão Brasil</h3>
+          <p class="proj-desc">Landing page completa para salão de beleza em Goiânia. Design elegante com paleta verde e dourado, seção de serviços, depoimentos e agendamento via WhatsApp.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">HTML</span>
+            <span class="proj-tag">CSS</span>
+            <span class="proj-tag">Responsivo</span>
+            <span class="proj-tag">WhatsApp CTA</span>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card r">
+        <div class="proj-thumb proj-thumb-2">
+          <div class="proj-monogram">CA</div>
+        </div>
+        <div class="proj-body">
+          <p class="proj-category">Site premium</p>
+          <h3 class="proj-name">Christian Angley Salão</h3>
+          <p class="proj-desc">Site dark editorial de alto luxo para salão no Setor Bueno, Goiânia. Cursor customizado, ticker animado, galeria de portfólio e formulário de agendamento.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">HTML</span>
+            <span class="proj-tag">CSS</span>
+            <span class="proj-tag">Animações</span>
+            <span class="proj-tag">Dark theme</span>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card r" style="opacity:0.5; pointer-events:none;">
+        <div class="proj-thumb proj-thumb-3">
+          <div class="proj-monogram">Em breve</div>
+        </div>
+        <div class="proj-body">
+          <p class="proj-category">Em produção</p>
+          <h3 class="proj-name">Próximo projeto</h3>
+          <p class="proj-desc">Novo projeto em desenvolvimento. Acompanhe as atualizações.</p>
+          <div class="proj-tags"><span class="proj-tag">Em breve</span></div>
+        </div>
+      </div>
+      <div class="proj-card r" style="opacity:0.5; pointer-events:none;">
+        <div class="proj-thumb proj-thumb-4">
+          <div class="proj-monogram">Em breve</div>
+        </div>
+        <div class="proj-body">
+          <p class="proj-category">Em produção</p>
+          <h3 class="proj-name">Próximo projeto</h3>
+          <p class="proj-desc">Novo projeto em desenvolvimento. Acompanhe as atualizações.</p>
+          <div class="proj-tags"><span class="proj-tag">Em breve</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec" id="contato">
+  <div class="cta-glow"></div>
+  <div class="cta-content r">
+    <p class="sec-chip" style="justify-content:center;">Vamos trabalhar juntos</p>
+    <h2 class="cta-title">Seu negócio merece<br><em>presença online</em></h2>
+    <p class="cta-sub">Me chama no WhatsApp agora. Em minutos você já tem uma proposta clara, sem enrolação.</p>
+    <div class="cta-actions">
+      <a href="https://wa.me/5562999999999?text=Olá Felipe! Vi seu portfólio e gostaria de conversar sobre um projeto." class="btn-primary" style="font-size:0.9rem; padding:15px 32px;">
+        💬 Chamar no WhatsApp
+      </a>
+      <a href="mailto:felipeforlan@email.com" class="btn-secondary">
+        ✉️ Enviar e-mail
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Felipe <span>Forlan</span></div>
+  <div class="footer-links">
+    <a href="#servicos">Serviços</a>
+    <a href="#projetos">Projetos</a>
+    <a href="#contato">Contato</a>
+  </div>
+  <p class="footer-copy">© 2025 Felipe Forlan · Goiânia, GO</p>
+</footer>
+
+<script>
+  // Nav scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Reveal on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('on'), i * 100);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.r').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
